@@ -24,9 +24,11 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
+
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
+
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -146,6 +148,9 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+
+        character.render();
+
         gems.forEach(function(gem) {
             gem.render();
         });
@@ -158,7 +163,6 @@ var Engine = (function(global) {
         });
 
         player.render();
-
     }
 
     /* This function does nothing but it could have been a good place to
@@ -166,7 +170,16 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+
+        character = new Character();
+
+        occupiedPos = [];
+
+        gems = [];
+
+        allEnemies = [];
+
+        player = new Player();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -178,17 +191,25 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
+        'images/ghost.png',
         'images/enemy-fish.png',
-        'images/char-boy.png',
-        'images/char-boy-right.png',
         'images/gem-blue.png',
         'images/gem-green.png',
         'images/gem-orange.png',
-        'images/char-boy-left.png',
         'images/key.png',
-        'images/key-outline.png',
-        'images/Heart.png',
-        'images/empty-heart.png'
+        'images/empty-key.png',
+        'images/heart.png',
+        'images/empty-heart.png',
+        'images/star.png',
+        'images/char-green.png',
+        'images/char-green-right.png',
+        'images/char-green-left.png',
+        'images/char-yellow.png',
+        'images/char-yellow-right.png',
+        'images/char-yellow-left.png',
+        'images/char-pink.png',
+        'images/char-pink-right.png',
+        'images/char-pink-left.png'
         ]);
     Resources.onReady(init);
 
@@ -197,4 +218,5 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+    global.reset = reset;
 })(this);

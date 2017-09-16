@@ -108,6 +108,7 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+        instruction.render(); 
         var rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
@@ -149,20 +150,44 @@ var Engine = (function(global) {
          * the render function you have defined.
          */
 
-        character.render();
+        if(!instruction.startGame){
+           character.render();
 
-        gems.forEach(function(gem) {
-            gem.render();
-        });
+            gems.forEach(function(gem) {
+                gem.render();
+            });
 
-        key.render();
-        
+            key.render();
+            
 
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
+            allEnemies.forEach(function(enemy) {
+                enemy.render();
+            });
 
-        player.render();
+            player.render();
+
+            instruction.render(); 
+
+        } else {
+
+            character.render();
+
+            gems.forEach(function(gem) {
+                gem.render();
+            });
+
+            key.render();
+            
+
+            allEnemies.forEach(function(enemy) {
+                enemy.render();
+            });
+
+            player.render();
+  
+        }
+
+
     }
 
     /* This function does nothing but it could have been a good place to
@@ -187,6 +212,8 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
+        'images/inst.png',
+        'images/outline.png',
         'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',

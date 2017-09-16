@@ -15,7 +15,7 @@ var Enemy = function() {
     var yPos = [52, 134, 216];
     var random = Math.floor(Math.random() * (2 - 0 + 1) + 0);
     this.y = yPos[random];
-    this.x = 0;
+    this.x = -50;
     // Speed of the enemy is a random number between 200 and 400
     this.speed = Math.floor(Math.random() * (400 - 200 + 1) + 200);
 };
@@ -29,7 +29,7 @@ Enemy.prototype.update = function(dt) {
 
     if (!this.checkCollision()) {
         if (this.x > 505) {
-            this.x = 0;
+            this.x = -50;
         } else {
             this.x = this.x + this.speed * dt;
         }
@@ -120,6 +120,7 @@ Player.prototype.render = function() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
     ctx.font = "60px Baloo Tammudu";
+    ctx.fillStyle="#000000";
     ctx.fillText(this.score, 10, 575);
 
     var heartX = 440;
@@ -353,6 +354,7 @@ var Character = function() {
 Character.prototype.render = function() {
     if (!this.selected) {
         ctx.drawImage(Resources.get('images/star.png'), 215, 500);
+        ctx.drawImage(Resources.get('images/outline.png'), 200, 400);
         for (var i = 0; i < 3; i++) {
             ctx.drawImage(Resources.get(this.icons[i]), this.positions[i], 380);
         }
@@ -360,6 +362,7 @@ Character.prototype.render = function() {
 };
 
 Character.prototype.chooseChar = function(direction) {
+    if(instruction.startGame){
     switch (direction) {
         case 'left':
             if (this.positions[0] < 360) {
@@ -381,6 +384,7 @@ Character.prototype.chooseChar = function(direction) {
             break;
 
         case 'enter':
+        if(!this.selected){
             switch (this.positions[0]) {
                 case 200:
                     this.selected = 'green';
@@ -398,13 +402,39 @@ Character.prototype.chooseChar = function(direction) {
             allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
             key = new Key();
             break;
+        }
+
     }
 }
+};
 
+var Instruction = function() {
+    this.main = 'images/inst.png';
+    this.startGame = false;
+};
+
+Instruction.prototype.render = function() {
+    if(!this.startGame){
+        ctx.drawImage(Resources.get(this.main), 0, 0);
+    } else {
+        ctx.fillStyle="#ffffff";
+        ctx.fillRect(0,0,505,606);
+    }
+    
+};
+
+Instruction.prototype.beginGame = function(input) {
+    if(input === 'enter'){
+        this.startGame = true;
+    }
+    
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+
+var instruction = new Instruction();
 
 var character = new Character();
 
@@ -432,6 +462,8 @@ document.addEventListener('keyup', function(e) {
         13: 'enter'
     };
 
+    
     character.chooseChar(allowedKeys[e.keyCode]);
     player.handleInput(allowedKeys[e.keyCode]);
+    instruction.beginGame(allowedKeys[e.keyCode]);
 });
